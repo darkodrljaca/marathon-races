@@ -1,4 +1,4 @@
-Laravel 8
-API Rest
-MySQL
-React JS
+<p>Laravel 8</p>
+<p>API Rest</p>
+<p>MySQL</p>
+<p>React JS</p>
