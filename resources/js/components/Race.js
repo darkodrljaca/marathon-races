@@ -4,11 +4,13 @@ const Race = ({id, name, city, description, price, image, race_at, removeRacePas
     const[readMore, setReadMore] = useState(false)
     return (
         <article className='single-race'>
+            <div className='race-info-name'>
+                <h4>{name}</h4>                
+            </div>
             <img src={image} alt={name}/>
-            <footer>
-            <div className='race-info'>
-                <h4>{name}</h4>
-                <h4 className='race-price'>${price}</h4>
+            <footer>            
+            <div className='race-info-price'>                
+                <h4 className='race-price'>Price from ${price}</h4>
             </div>
             <p>
                 { readMore?description:

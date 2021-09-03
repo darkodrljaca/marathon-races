@@ -101,7 +101,7 @@ h1 {
     }
   }
   .btn {
-    background: var(--clr-primary-5);
+    background: var(--clr-green-dark);
     display: inline-block;
     padding: 0.25rem 0.5rem;
     border-radius: var(--radius);
@@ -129,11 +129,13 @@ main {
   text-align: center;
 }
 .title {
+  font-size: 1.5rem;
   text-align: center;
   margin-bottom: 4rem;
+  text-transform: capitalize;
 }
 .underline {
-  width: 6rem;
+  width: 26rem;
   height: 0.25rem;
   background: var(--clr-primary-5);
   margin-left: auto;
@@ -156,13 +158,28 @@ main {
   border-top-right-radius: var(--radius);
   border-top-left-radius: var(--radius);
 }
-.race-info {
-  display: flex;
+.race-info-name {
+  /* display: center; */
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+.race-info-name h4 {
+  text-align: center; 
+  font-size: 1.5rem;
+  margin-top: 1.5rem; 
+  /* margin-bottom: 0; */
+}
+.race-info-price {
+  display: center;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
 }
-.race-info h4 {
+.race-info-price h4 {
+  text-align: right; 
   margin-bottom: 0;
 }
 .single-race button {
