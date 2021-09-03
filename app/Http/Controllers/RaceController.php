@@ -6,8 +6,8 @@ use App\Models\Race;
 
 class RaceController extends Controller {
 
-    public function index() {
-
+    public function index() {                
+        
         return Race::all();
 
     }

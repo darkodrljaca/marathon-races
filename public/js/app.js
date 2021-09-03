@@ -61,6 +61,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var url = 'http://localhost:8000/api/races';
 
 function App() {
@@ -73,6 +74,13 @@ function App() {
       _useState4 = _slicedToArray(_useState3, 2),
       races = _useState4[0],
       setRaces = _useState4[1];
+
+  var removeRace = function removeRace(id) {
+    var newRace = races.filter(function (race) {
+      return race.id !== id;
+    });
+    setRaces(newRace);
+  };
 
   var fetchRaces = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -128,9 +136,25 @@ function App() {
     });
   }
 
+  if (races.length === 0) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("main", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "title",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h2", {
+          children: "no races left"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+          className: "btn",
+          onClick: fetchRaces,
+          children: "refresh"
+        })]
+      })
+    });
+  }
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("main", {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Races__WEBPACK_IMPORTED_MODULE_3__.default, {
-      races: races
+      races: races,
+      removeRacePassing1: removeRace
     })
   });
 }
@@ -206,6 +230,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -217,9 +253,16 @@ var Race = function Race(_ref) {
       description = _ref.description,
       price = _ref.price,
       image = _ref.image,
-      race_at = _ref.race_at;
+      race_at = _ref.race_at,
+      removeRacePassing2 = _ref.removeRacePassing2;
+
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      readMore = _useState2[0],
+      setReadMore = _useState2[1];
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("article", {
-    className: "single-tour",
+    className: "single-race",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
       src: image,
       alt: name
@@ -232,11 +275,20 @@ var Race = function Race(_ref) {
           className: "race-price",
           children: ["$", price]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("p", {
-        children: description
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("p", {
+        children: [readMore ? description : // else use expression to get part of the string start with 0
+        "".concat(description.substring(0, 200), "..."), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+          onClick: function onClick() {
+            return setReadMore(!readMore);
+          },
+          children: readMore ? 'show less' : 'read more'
+        })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
         className: "delete-btn",
-        children: "remove"
+        onClick: function onClick() {
+          return removeRacePassing2(id);
+        },
+        children: "remove from the list"
       })]
     })]
   });
@@ -270,7 +322,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 var Races = function Races(_ref) {
-  var races = _ref.races;
+  var races = _ref.races,
+      removeRacePassing1 = _ref.removeRacePassing1;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("section", {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
       className: "title",
@@ -281,7 +334,9 @@ var Races = function Races(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
       children: races.map(function (race) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_Race__WEBPACK_IMPORTED_MODULE_0__.default, _objectSpread({}, race), race.id);
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(_Race__WEBPACK_IMPORTED_MODULE_0__.default, _objectSpread(_objectSpread({}, race), {}, {
+          removeRacePassing2: removeRacePassing1
+        }), race.id);
       })
     })]
   });
@@ -308,7 +363,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/*\n=============== \nVariables\n===============\n*/\n\n:root {\n    /* dark shades of primary color*/\n    --clr-primary-1: hsl(205, 86%, 17%);\n    --clr-primary-2: hsl(205, 77%, 27%);\n    --clr-primary-3: hsl(205, 72%, 37%);\n    --clr-primary-4: hsl(205, 63%, 48%);\n    /* primary/main color */\n    --clr-primary-5: hsl(205, 78%, 60%);\n    /* lighter shades of primary color */\n    --clr-primary-6: hsl(205, 89%, 70%);\n    --clr-primary-7: hsl(205, 90%, 76%);\n    --clr-primary-8: hsl(205, 86%, 81%);\n    --clr-primary-9: hsl(205, 90%, 88%);\n    --clr-primary-10: hsl(205, 100%, 96%);\n    /* darkest grey - used for headings */\n    --clr-grey-1: hsl(209, 61%, 16%);\n    --clr-grey-2: hsl(211, 39%, 23%);\n    --clr-grey-3: hsl(209, 34%, 30%);\n    --clr-grey-4: hsl(209, 28%, 39%);\n    /* grey used for paragraphs */\n    --clr-grey-5: hsl(210, 22%, 49%);\n    --clr-grey-6: hsl(209, 23%, 60%);\n    --clr-grey-7: hsl(211, 27%, 70%);\n    --clr-grey-8: hsl(210, 31%, 80%);\n    --clr-grey-9: hsl(212, 33%, 89%);\n    --clr-grey-10: hsl(210, 36%, 96%);\n    --clr-white: #fff;\n    --clr-red-dark: hsl(360, 67%, 44%);\n    --clr-red-light: hsl(360, 71%, 66%);\n    --clr-green-dark: hsl(125, 67%, 44%);\n    --clr-green-light: hsl(125, 71%, 66%);\n    --clr-black: #222;\n    --transition: all 0.3s linear;\n    --spacing: 0.1rem;\n    --radius: 0.25rem;\n    --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);\n    --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);\n    --max-width: 1170px;\n    --fixed-width: 620px;\n  }\n\n/*\n=============== \nGlobal Styles\n===============\n*/\n\n*,\n::after,\n::before {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,\n      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\n    background: var(--clr-grey-10);\n    color: var(--clr-grey-1);\n    line-height: 1.5;\n    font-size: 0.875rem;\n  }\nh1 {\n  letter-spacing: var(--spacing);\n  text-transform: capitalize;\n  line-height: 1.25;\n  margin-bottom: 0.75rem;\n}\nh1 {\n  font-size: 3rem;\n}\n\n@media screen and (min-width: 800px) {\n    h1 {\n        font-size: 4rem;\n    }\n    h1 {\n        line-height: 1;\n    }\n     \n}\n\n/*  global classes */\n\n/* section */\n.section {\n    width: 90vw;\n    margin: 0 auto;\n    max-width: var(--max-width);\n  }\n  \n  @media screen and (min-width: 992px) {\n    .section {\n      width: 95vw;\n    }\n  }\n  .btn {\n    background: var(--clr-primary-5);\n    display: inline-block;\n    padding: 0.25rem 0.5rem;\n    border-radius: var(--radius);\n    text-transform: capitalize;\n    color: var(--clr-white);\n    letter-spacing: var(--spacing);\n    border-color: transparent;\n    cursor: pointer;\n    margin-top: 2rem;\n    font-size: 1.2rem;\n  }", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "/*\n=============== \nVariables\n===============\n*/\n\n:root {\n    /* dark shades of primary color*/\n    --clr-primary-1: hsl(205, 86%, 17%);\n    --clr-primary-2: hsl(205, 77%, 27%);\n    --clr-primary-3: hsl(205, 72%, 37%);\n    --clr-primary-4: hsl(205, 63%, 48%);\n    /* primary/main color */\n    --clr-primary-5: hsl(205, 78%, 60%);\n    /* lighter shades of primary color */\n    --clr-primary-6: hsl(205, 89%, 70%);\n    --clr-primary-7: hsl(205, 90%, 76%);\n    --clr-primary-8: hsl(205, 86%, 81%);\n    --clr-primary-9: hsl(205, 90%, 88%);\n    --clr-primary-10: hsl(205, 100%, 96%);\n    /* darkest grey - used for headings */\n    --clr-grey-1: hsl(209, 61%, 16%);\n    --clr-grey-2: hsl(211, 39%, 23%);\n    --clr-grey-3: hsl(209, 34%, 30%);\n    --clr-grey-4: hsl(209, 28%, 39%);\n    /* grey used for paragraphs */\n    --clr-grey-5: hsl(210, 22%, 49%);\n    --clr-grey-6: hsl(209, 23%, 60%);\n    --clr-grey-7: hsl(211, 27%, 70%);\n    --clr-grey-8: hsl(210, 31%, 80%);\n    --clr-grey-9: hsl(212, 33%, 89%);\n    --clr-grey-10: hsl(210, 36%, 96%);\n    --clr-white: #fff;\n    --clr-red-dark: hsl(360, 67%, 44%);\n    --clr-red-light: hsl(360, 71%, 66%);\n    --clr-green-dark: hsl(125, 67%, 44%);\n    --clr-green-light: hsl(125, 71%, 66%);\n    --clr-black: #222;\n    --transition: all 0.3s linear;\n    --spacing: 0.1rem;\n    --radius: 0.25rem;\n    --light-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);\n    --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);\n    --max-width: 1170px;\n    --fixed-width: 620px;\n  }\n\n/*\n=============== \nGlobal Styles\n===============\n*/\n\n*,\n::after,\n::before {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,\n      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\n    background: var(--clr-grey-10);\n    color: var(--clr-grey-1);\n    line-height: 1.5;\n    font-size: 0.875rem;\n  }\nh1 {\n  letter-spacing: var(--spacing);\n  text-transform: capitalize;\n  line-height: 1.25;\n  margin-bottom: 0.75rem;\n}\nh1 {\n  font-size: 3rem;\n}\n\n@media screen and (min-width: 800px) {\n    h1 {\n        font-size: 4rem;\n    }\n    h1 {\n        line-height: 1;\n    }\n     \n}\n\n/*  global classes */\n\n/* section */\n.section {\n    width: 90vw;\n    margin: 0 auto;\n    max-width: var(--max-width);\n  }\n  \n  @media screen and (min-width: 992px) {\n    .section {\n      width: 95vw;\n    }\n  }\n  .btn {\n    background: var(--clr-primary-5);\n    display: inline-block;\n    padding: 0.25rem 0.5rem;\n    border-radius: var(--radius);\n    text-transform: capitalize;\n    color: var(--clr-white);\n    letter-spacing: var(--spacing);\n    border-color: transparent;\n    cursor: pointer;\n    margin-top: 2rem;\n    font-size: 1.2rem;\n  }\n\n  /*\n=============== \nRaces\n===============\n*/\n\nmain {\n  width: 90vw;\n  max-width: var(--fixed-width);\n  margin: 5rem auto;\n}\n.loading {\n  text-align: center;\n}\n.title {\n  text-align: center;\n  margin-bottom: 4rem;\n}\n.underline {\n  width: 6rem;\n  height: 0.25rem;\n  background: var(--clr-primary-5);\n  margin-left: auto;\n  margin-right: auto;\n}\n.single-race {\n  background: var(--clr-white);\n  border-radius: var(--radius);\n  margin: 2rem 0;\n  box-shadow: var(--light-shadow);\n  transition: var(--transition);\n}\n.single-race:hover {\n  box-shadow: var(--dark-shadow);\n}\n.single-race img {\n  width: 100%;\n  height: 20rem;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-top-right-radius: var(--radius);\n  border-top-left-radius: var(--radius);\n}\n.race-info {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  margin-bottom: 1.5rem;\n}\n.race-info h4 {\n  margin-bottom: 0;\n}\n.single-race button {\n  background: transparent;\n  border-color: transparent;\n  text-transform: capitalize;\n  color: var(--clr-primary-5);\n  font-size: 1rem;\n  cursor: pointer;\n  padding-left: 0.25rem;\n}\n.race-price {\n  color: var(--clr-primary-5);\n  background: var(--clr-primary-10);\n  padding: 0.25rem 0.5rem;\n  border-radius: var(--radius);\n}\n.single-race footer {\n  padding: 1.5rem 2rem;\n}\n.single-race .delete-btn {\n  display: block;\n  width: 200px;\n  margin: 1rem auto 0 auto;\n  color: var(--clr-red-dark);\n  /* letter-spacing: var(--spacing); */\n  background: transparent;\n  border: 1px solid var(--clr-red-dark);\n  padding: 0.25rem 0.5rem;\n  border-radius: var(--radius);\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

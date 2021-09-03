@@ -9,6 +9,11 @@ function App() {
   const[loading, setLoading] = useState(true)
   const[races, setRaces] = useState([])
 
+  const removeRace = (id) => {
+    const newRace = races.filter((race) => race.id !== id)
+    setRaces(newRace)
+  }
+
   const fetchRaces = async () => {
     setLoading(true)
     try {
@@ -33,12 +38,22 @@ function App() {
         <Loading />
       </main>
     )
-  }  
+  }
+  if(races.length === 0) {
     return (
       <main>
-        <Races races={races} />
+        <div className='title'>
+          <h2>no races left</h2>
+          <button className='btn' onClick={fetchRaces}>refresh</button>
+        </div>
       </main>
-    )  
+    )
+  }  
+  return (
+    <main>
+      <Races races={races} removeRacePassing1={removeRace} />
+    </main>
+  )  
 }
 
 export default App;
